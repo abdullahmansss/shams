@@ -117,6 +117,11 @@ class _UsersScreenState extends State<UsersScreen> {
       print(event.docs.length);
       users = event.docs;
 
+      event.docs.forEach((element)
+      {
+        print(element['phone']);
+      });
+
       setState(() {});
     });
   }

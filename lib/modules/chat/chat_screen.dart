@@ -12,8 +12,7 @@ class ChatScreen extends StatefulWidget {
   _ChatScreenState createState() => _ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> 
-{
+class _ChatScreenState extends State<ChatScreen> {
   Map data = {};
   List messagesList = [];
   var messageController = TextEditingController();
@@ -26,8 +25,7 @@ class _ChatScreenState extends State<ChatScreen>
   }
 
   @override
-  Widget build(BuildContext context) 
-  {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -38,7 +36,8 @@ class _ChatScreenState extends State<ChatScreen>
               radius: 20.0,
               child: Image(
                 image: NetworkImage(
-                  data['image'],
+                  data['image'] ??
+                      'https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png',
                 ),
               ),
             ),
@@ -105,8 +104,8 @@ class _ChatScreenState extends State<ChatScreen>
                   ),
                 if (messagesList.length == 0)
                   Center(
-                  child: CircularProgressIndicator(),
-                ),
+                    child: CircularProgressIndicator(),
+                  ),
               ],
             ),
           ),
@@ -216,6 +215,10 @@ class _ChatScreenState extends State<ChatScreen>
         .collection('chats')
         .doc(data['id'])
         .collection('messages')
+        .orderBy(
+          'iii',
+          descending: true,
+        )
         .snapshots()
         .listen((event) {
       print('list =====> ${event.docs.length}');
@@ -240,7 +243,10 @@ class _ChatScreenState extends State<ChatScreen>
   }
 
   Widget userItem(item) => Padding(
-    padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0,),
+        padding: EdgeInsets.symmetric(
+          horizontal: 15.0,
+          vertical: 5.0,
+        ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -286,7 +292,10 @@ class _ChatScreenState extends State<ChatScreen>
       );
 
   Widget myItem(item) => Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0,),
+        padding: EdgeInsets.symmetric(
+          horizontal: 15.0,
+          vertical: 5.0,
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
