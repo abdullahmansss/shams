@@ -1,11 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/login_screen.dart';
-import 'package:flutter_app/modules/profile/profile_screen.dart';
-import 'package:flutter_app/register_screen.dart';
-import 'package:flutter_app/settings_screen.dart';
+import 'package:flutter_app/modules/home/home_screen.dart';
+import 'package:flutter_app/modules/welcome/welcome_screen.dart';
 
 void main() async
 {
@@ -19,33 +17,123 @@ void main() async
 
   if(user != null)
   {
-    myWidget = ProfileScreen();
+    myWidget = HomeScreen();
   } else
     {
-      myWidget = LoginScreen();
+      myWidget = WelcomeScreen();
     }
 
   runApp(MyApp(myWidget));
 }
 
-class MyApp extends StatelessWidget
+class MyApp extends StatefulWidget
 {
   Widget myWidget;
 
   MyApp(this.myWidget);
 
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver
+{
+  AppLifecycleState _lastLifecycleState;
+
+  @override
+  void initState()
+  {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose()
+  {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state)
+  {
+    setState(()
+    {
+      _lastLifecycleState = state;
+      print(state.toString());
+    });
+  }
 
   @override
   Widget build(BuildContext context)
   {
+    if(_lastLifecycleState == null)
+    {
+      // FirebaseFirestore.instance
+      //     .collection('users')
+      //     .doc(FirebaseAuth.instance.currentUser.uid)
+      //     .update({
+      //   'status': 'off',
+      // }).then((value) {
+      //   //getData();
+      //   print('success');
+      // }).catchError((error) {
+      //   print(error.toString());
+      // });
+
+      print('offfff');
+    }
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Chat App',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.indigo,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: myWidget,
+      home: widget.myWidget,
     );
   }
 }
+
+// class LifecycleWatcher extends StatefulWidget
+// {
+//   @override
+//   _LifecycleWatcherState createState() => _LifecycleWatcherState();
+// }
+//
+// class _LifecycleWatcherState extends State<LifecycleWatcher> with WidgetsBindingObserver
+// {
+//   AppLifecycleState _lastLifecycleState;
+//
+//   @override
+//   void initState()
+//   {
+//     super.initState();
+//     WidgetsBinding.instance.addObserver(this);
+//   }
+//
+//   @override
+//   void dispose()
+//   {
+//     WidgetsBinding.instance.removeObserver(this);
+//     super.dispose();
+//   }
+//
+//   @override
+//   void didChangeAppLifecycleState(AppLifecycleState state)
+//   {
+//     setState(() {
+//       _lastLifecycleState = state;
+//     });
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     if (_lastLifecycleState == null)
+//       return Text('This widget has not observed any lifecycle changes.', textDirection: TextDirection.ltr);
+//
+//     return Text('The most recent lifecycle state this widget observed was: $_lastLifecycleState.',
+//         textDirection: TextDirection.ltr);
+//   }
+// }
